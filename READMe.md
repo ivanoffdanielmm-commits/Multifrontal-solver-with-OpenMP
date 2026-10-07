@@ -25,7 +25,7 @@
 
 ## 2. Построение дерева исключения
 
-Дерево исключения определяет зависимости между столбцами в ходе факторизации. Родителем столбца $j$ становится наименьший индекс $i > j$, такой что столбец $j$ непосредственно обновляет столбец $i$.
+Дерево исключения определяет зависимости между столбцами в ходе факторизации. Родителем столбца $j$ становится наименьший индекс $i > j$, такой что столбец $j$ непосредственно обновляет столбец $i$. 
 
 Дерево используется для:
 * Установления порядка обхода узлов при сборке фронтальных матриц.
@@ -44,9 +44,12 @@
    &emsp;Для каждого $j < i$, такого что $a_{ij} \neq 0$:
    &emsp;&emsp;$r \gets j$
    &emsp;&emsp;Пока $\mathrm{ancestor}[r] \neq -1$ и $\mathrm{ancestor}[r] \neq i$:
-   &emsp;&emsp;&emsp;$t \gets \mathrm{ancestor}[r]$, $\mathrm{ancestor}[r] \gets i$, $r \gets t$
+   &emsp;&emsp;&emsp;$t \gets \mathrm{ancestor}[r]$  
+   &emsp;&emsp;&emsp;$\mathrm{ancestor}[r] \gets i$  
+   &emsp;&emsp;&emsp;$r \gets t$  
    &emsp;&emsp;Если $\mathrm{ancestor}[r] = -1$:
-   &emsp;&emsp;&emsp;$\mathrm{ancestor}[r] \gets i$, $\mathrm{parent}[r] \gets i$
+   &emsp;&emsp;&emsp;$\mathrm{ancestor}[r] \gets i$  
+   &emsp;&emsp;&emsp;$\mathrm{parent}[r] \gets i$
 
 > Операция $\mathrm{ancestor}[r] \gets i$ реализует сжатие пути.
 
@@ -56,7 +59,7 @@
 
 ## 3. Мультифронтальная факторизация
 
-Численная факторизация выполняется путем обхода дерева исключения в **пост-порядке** (снизу вверх).
+Численная факторизация выполняется путем обхода дерева исключения в **пост-порядке** (снизу вверх). 
 
 Для каждого узла $k$:
 1. Собирается плотная фронтальная матрица.
@@ -78,7 +81,7 @@
    * выполнить $F_k[i][j] \mathrel{+}= a_{uv}$; если $i \neq j$: $F_k[j][i] \mathrel{+}= a_{uv}$.
 3. **Добавление вкладов детей (операция расширения-сложения):**
    Для каждого ребёнка $c$ с блоком $C_c$:
-   &emsp;Для каждого элемента $C_c(r,s)$ с глобальными индексами строки $g_r$ и столбца $g_s$:
+   &emsp;Для каждого元素 $C_c(r,s)$ с глобальными индексами строки $g_r$ и столбца $g_s$:
    &emsp;&emsp;$i = \mathrm{pos}(g_r)$, $j = \mathrm{pos}(g_s)$;
    &emsp;&emsp;$F_k[i][j] \mathrel{+}= C_c(r,s)$.
 
@@ -115,7 +118,7 @@
    При обнаружении:
    * Переставить $u \to \mathrm{step}$, $v \to \mathrm{step}+1$ в $F_k$ и $L_k$;
    * Пересчитать $a,b,c$ в новых позициях $\mathrm{step}, \mathrm{step}+1$;
-   * Сформировать блок $D_{\mathrm{step}} = \begin{pmatrix} a & b \\ b & c \end{pmatrix}$ и обратную матрицу $D_{\mathrm{step}}^{-1} = \frac{1}{\mathrm{det}} \begin{pmatrix} c & -b \\ -b & a \end{pmatrix}$;
+   * Сформировать блок $D_{\mathrm{step}} = \begin{pmatrix} a & b \\\\ b & c \end{pmatrix}$ и обратную матрицу $D_{\mathrm{step}}^{-1} = \frac{1}{\mathrm{det}} \begin{pmatrix} c & -b \\\\ -b & a \end{pmatrix}$;
    * Для $r = \mathrm{step}+2, \ldots, m-1$ вычислить:
      $$(\ell_{r,\mathrm{step}},\ \ell_{r,\mathrm{step}+1}) = (F_k[r][\mathrm{step}], F_k[r][\mathrm{step}+1]) \cdot D_{\mathrm{step}}^{-1}$$
      $$L_k[r][\mathrm{step}] = \ell_{r,\mathrm{step}}, \quad L_k[r][\mathrm{step}+1] = \ell_{r,\mathrm{step}+1}$$
@@ -138,7 +141,7 @@ $$C_k(i,j) = F_k[p+i][p+j], \quad i,j = 0, \ldots, m-p-1$$
 
 ## 4. Решение системы (прямой и обратный ход)
 
-После факторизации решение исходной системы $Ax = b$ сводится к последовательному решению двух треугольных систем:
+После факторизации решение исходной системы $Ax = b$ сводится к последовательному решению двух треугольных систем: 
 1. $Ly = b$
 2. $DL^Tx = y$
 
@@ -162,11 +165,11 @@ $$C_k(i,j) = F_k[p+i][p+j], \quad i,j = 0, \ldots, m-p-1$$
 
 1. Извлекается локальный вектор $z_{\mathrm{loc}}$:
    $$z_{\mathrm{loc}}[i] = y[I_k[\sigma_k[i]]], \quad i = 0, \ldots, m-1$$
-2. Решается система $Dw = z_{\mathrm{loc}}$ (масштабирование с учётом блоков $2 \times 2$).
+2. Решается система $Dw = z_{\mathrm{loc}}$ (масштабирование с учётом блоков $2 \times 2$). 
    Полагается $s = 0$. Пока $s < p$:
    * Если блок $1 \times 1$ с элементом $d_s$:
      $$w[s] = z_{\mathrm{loc}}[s] / d_s, \quad s \gets s+1$$
-   * Если блок $2 \times 2$ вида $D_2 = \begin{pmatrix} a & b \\ b & c \end{pmatrix}$ на позициях $s, s+1$:$$\begin{pmatrix} w[s] \ w[s+1] \end{pmatrix} = D_2^{-1} \begin{pmatrix} z_{\mathrm{loc}}[s] \ z_{\mathrm{loc}}[s+1] \end{pmatrix}, \quad s \gets s+2$$
+   * Если блок $2 \times 2$ вида $D_2 = \begin{pmatrix} a & b \\\\ b & c \end{pmatrix}$ на позициях $s, s+1$:$$\begin{pmatrix} w[s] \\ w[s+1] \end{pmatrix} = D_2^{-1} \begin{pmatrix} z_{\mathrm{loc}}[s] \\ z_{\mathrm{loc}}[s+1] \end{pmatrix}, \quad s \gets s+2$$
 • Для $s \ge p$ принимается:
 $$w[s] = z_{\mathrm{loc}}[s]$$
 3. Выполняется обратная подстановка $L_k^T x_{\mathrm{loc}} = w$:
