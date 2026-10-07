@@ -129,10 +129,12 @@ $$\mathrm{nodeVars}[k] = \{ k \} \cup \{ i > k \mid a_{ik} \neq 0 \}$$
      1. Переставить $u \rightarrow \mathrm{step}$, $v \rightarrow \mathrm{step}+1$ в $F_k$ и $L_k$.
      2. Пересчитать значения $a, b, c$ в новых позициях.
      3. Сформировать блок и его обратную матрицу:
-     \$`\mathrm{D}_{\mathrm{step}} = \begin{pmatrix} \mathrm{a} & \mathrm{b} \\ \mathrm{b} & \mathrm{c} \end{pmatrix}`\(, \quad\)`\mathrm{D}_{\mathrm{step}}^{-1} = \frac{1}{\mathrm{det}} \begin{pmatrix} \mathrm{c} & -\mathrm{b} \\ -\mathrm{b} & \mathrm{a} \end{pmatrix}`\(  
-     4. Для \)`\mathrm{r} = \mathrm{step}+2, \ldots, \mathrm{m}-1`\( вычислить строку множителей: \)`(\ell_{\mathrm{r},\,\mathrm{step}}, \, \ell_{\mathrm{r},\,\mathrm{step}+1}) = \begin{pmatrix} \mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}] & \mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}+1] \end{pmatrix} \mathrm{D}_{\mathrm{step}}^{-1}`\(  Записать их в \)`\mathrm{L}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}]`\( и \)`\mathrm{L}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}+1]`\(.  
-    5. **Обновление Шура:** Для \)`\mathrm{r}, \mathrm{c} = \mathrm{step}+2, \ldots, \mathrm{m}-1`\(:\)`\mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{c}] \gets \mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{c}] - \begin{pmatrix} \ell_{\mathrm{r},\,\mathrm{step}} & \ell_{\mathrm{r},\,\mathrm{step}+1} \end{pmatrix} \mathrm{D}_{\mathrm{step}} \begin{pmatrix} \ell_{\mathrm{c},\,\mathrm{step}} \\ \ell_{\mathrm{c},\,\mathrm{step}+1} \end{pmatrix}^{\mathrm{T}}`\(  
-    6. \)`\mathrm{step} \gets \mathrm{step} + 2`\$.
+     $\mathrm{D}_{\mathrm{step}} = \begin{pmatrix} \mathrm{a} & \mathrm{b} \\ \mathrm{b} & \mathrm{c} \end{pmatrix}$, \quad $\mathrm{D}_{\mathrm{step}}^{-1} = \frac{1}{\mathrm{det}} \begin{pmatrix} \mathrm{c} & -\mathrm{b} \\ -\mathrm{b} & \mathrm{a} \end{pmatrix}$
+     4. Для $\mathrm{r} = \mathrm{step}+2, \ldots, \mathrm{m}-1$ вычислить строку множителей: $(\ell_{\mathrm{r},\,\mathrm{step}}, \, \ell_{\mathrm{r},\,\mathrm{step}+1}) = \begin{pmatrix} \mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}] & \mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}+1] \end{pmatrix} \mathrm{D}_{\mathrm{step}}^{-1}$
+     Записать их в $\mathrm{L}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}]$ и $\mathrm{L}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}+1]$.
+    5. **Обновление Шура:** Для $\mathrm{r}, \mathrm{c} = \mathrm{step}+2, \ldots, \mathrm{m}-1$: $\mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{c}] \gets \mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{c}] - \begin{pmatrix} \ell_{\mathrm{r},\,\mathrm{step}} & \ell_{\mathrm{r},\,\mathrm{step}+1} \end{pmatrix} \mathrm{D}_{\mathrm{step}} \begin{pmatrix} \ell_{\mathrm{c},\,\mathrm{step}} \\ \ell_{\mathrm{c},\,\mathrm{step}+1} \end{pmatrix}^{\mathrm{T}}$
+    6. $\mathrm{step} \gets \mathrm{step} + 2$.
+
 
 
 > [!CAUTION]
