@@ -129,8 +129,7 @@ $$\mathrm{nodeVars}[k] = \{ k \} \cup \{ i > k \mid a_{ik} \neq 0 \}$$
      1. Переставить $u \rightarrow \mathrm{step}$, $v \rightarrow \mathrm{step}+1$ в $F_k$ и $L_k$.
      2. Пересчитать значения $a, b, c$ в новых позициях.
      3. 3. Сформировать блок и его обратную матрицу:
-     <br>
-     <img src="https://githubusercontent.com_{\text{step}}%20=%20\begin{pmatrix}%20a%20&%20b%20\\%20b%20&%20c%20\end{pmatrix},%20\quad%20D_{\text{step}}^{-1}%20=%20\frac{1}{\text{det}}%20\begin{pmatrix}%20c%20&%20-b%20\\%20-b%20&%20a%20\end{pmatrix}">
+     $$D_{\text{step}} = \left(\begin{matrix} a & b \cr b & c \end{matrix}\right), \quad D_{\text{step}}^{-1} = \frac{1}{\text{det}} \left(\begin{matrix} c & -b \cr -b & a \end{matrix}\right)$$
      4. Для $r = \text{step}+2, \ldots, m-1$ вычислить строку множителей: 
      $$(\ell_{r,\,\text{step}}, \, \ell_{r,\,\text{step}+1}) = \begin{pmatrix} F_k[r][\text{step}] & F_k[r][\text{step}+1] \end{pmatrix} D_{\text{step}}^{-1}$$
      Записать их в $L_k[r][\text{step}]$ и $L_k[r][\text{step}+1]$.
