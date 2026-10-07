@@ -30,13 +30,13 @@
 
 ## 2. Построение дерева исключения
 
-**Дерево исключения (Elimination Tree)** определяет зависимости между столбцами в ходе факторизации. Родителем столбца $j$ становится наименьший индекс $i > j$, такой что столбец $j$ непосредственно обновляет столбец $i$. 
+**Дерево исключения** определяет зависимости между столбцами в ходе факторизации. Родителем столбца $j$ становится наименьший индекс $i > j$, такой что столбец $j$ непосредственно обновляет столбец $i$. 
 
 Дерево используется для:
 * Установления порядка обхода узлов при сборке фронтальных матриц.
 * Выявления полностью собранных переменных.
 
-Построение выполняется с применением **сжатия путей (path compression)**, что обеспечивает практически линейную сложность алгоритма относительно числа ненулевых элементов.
+Построение выполняется с применением **сжатия путей**, что обеспечивает практически линейную сложность алгоритма относительно числа ненулевых элементов.
 
 * **Вход:** Переставленная матрица $A$ (используются только элементы $a_{ij}$ с $i > j$).
 * **Выход:** Массив $\mathrm{parent}[0..n-1]$, где $\mathrm{parent}[j]$ — родитель вершины $j$ ($\mathrm{parent}[j] = -1$ для корней дерева).
@@ -58,7 +58,11 @@
                parent[r] = i
    ```
 
-После построения дерева для каждого узла $k$ определяется множество **полностью собранных переменных** $\mathcal{F}_k$ как множество индексов, для которых узел $k$ является наименьшим общим предком всех вхождений переменной в структуру $A$. Вычисление опирается на списки $\mathrm{nodeVars}[k] = \{k\} \cup \{i > k \mid a_{ik} \neq 0\}$ и последующий подъём к наименьшему общему предку.
+После построения дерева для каждого узла $k$ определяется множество полностью собранных переменных $\mathcal{F}_k$ как множество индексов, для которых узел $k$ является наименьшим общим предком всех вхождений переменной в структуру $A$. 
+
+Вычисление опирается на списки:
+$$\mathrm{nodeVars}[k] = \{ k \} \cup \{ i > k \mid a_{ik} \neq 0 \}$$
+и последующий подъём к наименьшему общему предку.
 
 ---
 
@@ -71,7 +75,7 @@
 
 ### 3.1. Сборка фронтальной матрицы
 
-* **Вход:** Узел $k$, списки $\mathrm{nodeVars}[k], блоков вклада $C_c$ от детей $c \in \mathrm{children}(k)$, матрица $A$.
+* **Вход:** Узел $k$, списки списки $\mathrm{nodeVars}[\mathrm{k}]$, блоков вклада $C_c$ от детей $c \in \mathrm{children}(k)$, матрица $A$.
 * **Выход:** Глобальное индексное множество $I_k$ размера $m$ и плотная фронтальная матрица $F_k \in \mathbb{R}^{m \times m}$ (исходно нулевая).
 
 #### Формальные шаги:
@@ -109,8 +113,9 @@
      Для каждого $t$ от $\mathrm{step}$ до $p-1$ положить $\mathrm{piv} = F_k[t][t]$.
      Условие приёма элемента:
      $$|\mathrm{piv}| > \tau \quad \text{и} \quad |\mathrm{piv}| \ge 0.1 \cdot \max_{r \ge \mathrm{step},\, r \neq t} |F_k[r][t]|$$
-     Среди подходящих выбирается $t^*$ с наибольшим $|\mathrm{piv}|$.
-     Если $t^*$ найден:
+     Среди подходящих выбирается $\mathrm{t}^{\ast}$ с наибольшим $|\mathrm{piv}|$. Если $\mathrm{t}^{\ast}$ найден:
+
+
      1. Переставить строки и столбцы $\mathrm{step}$ и $t^*$ в $F_k$ и $L_k$.
      2. $d \gets F_k[\mathrm{step}][\mathrm{step}]$; сохранить $d$ как блок $1\times1$ в $D_k$.
      3. Для $i = \mathrm{step}+1, \ldots, m-1$: выписать множители $\ell_i = F_k[i][\mathrm{step}] / d$, положить $L_k[i][\mathrm{step}] = \ell_i$.
@@ -124,13 +129,11 @@
      1. Переставить $u \rightarrow \mathrm{step}$, $v \rightarrow \mathrm{step}+1$ в $F_k$ и $L_k$.
      2. Пересчитать значения $a, b, c$ в новых позициях.
      3. Сформировать блок и его обратную матрицу:
-        $$D_{\mathrm{step}} = \begin{pmatrix} a & b \\ b & c \end{pmatrix}, \quad D_{\mathrm{step}}^{-1} = \frac{1}{\mathrm{det}} \begin{pmatrix} c & -b \\ -b & a \end{pmatrix}$$
-     4. Для $r = \mathrm{step}+2, \ldots, m-1$ вычислить строку множителей:
-        $$(\ell_{r,\mathrm{step}}, \, \ell_{r,\mathrm{step}+1}) = \begin{pmatrix} F_k[r][\mathrm{step}] & F_k[r][\mathrm{step}+1] \end{pmatrix} D_{\mathrm{step}}^{-1}$$
-        Записать их в $L_k[r][\mathrm{step}]$ и $L_k[r][\mathrm{step}+1]$.
-     5. **Обновление Шура:** Для $r, c = \mathrm{step}+2, \ldots, m-1$:
-        $$F_k[r][c] \gets F_k[r][c] - \begin{pmatrix} \ell_{r,\mathrm{step}} & \ell_{r,\mathrm{step}+1} \end{pmatrix} D_{\mathrm{step}} \begin{pmatrix} \ell_{c,\mathrm{step}} \\ \ell_{c,\mathrm{step}+1} \end{pmatrix}$$
-     6. $\mathrm{step} \gets \mathrm{step} + 2$.
+     \$`\mathrm{D}_{\mathrm{step}} = \begin{pmatrix} \mathrm{a} & \mathrm{b} \\ \mathrm{b} & \mathrm{c} \end{pmatrix}`\(, \quad\)`\mathrm{D}_{\mathrm{step}}^{-1} = \frac{1}{\mathrm{det}} \begin{pmatrix} \mathrm{c} & -\mathrm{b} \\ -\mathrm{b} & \mathrm{a} \end{pmatrix}`\(  
+     4. Для \)`\mathrm{r} = \mathrm{step}+2, \ldots, \mathrm{m}-1`\( вычислить строку множителей: \)`(\ell_{\mathrm{r},\,\mathrm{step}}, \, \ell_{\mathrm{r},\,\mathrm{step}+1}) = \begin{pmatrix} \mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}] & \mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}+1] \end{pmatrix} \mathrm{D}_{\mathrm{step}}^{-1}`\(  Записать их в \)`\mathrm{L}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}]`\( и \)`\mathrm{L}_{\mathrm{k}}[\mathrm{r}][\mathrm{step}+1]`\(.  
+    5. **Обновление Шура:** Для \)`\mathrm{r}, \mathrm{c} = \mathrm{step}+2, \ldots, \mathrm{m}-1`\(:\)`\mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{c}] \gets \mathrm{F}_{\mathrm{k}}[\mathrm{r}][\mathrm{c}] - \begin{pmatrix} \ell_{\mathrm{r},\,\mathrm{step}} & \ell_{\mathrm{r},\,\mathrm{step}+1} \end{pmatrix} \mathrm{D}_{\mathrm{step}} \begin{pmatrix} \ell_{\mathrm{c},\,\mathrm{step}} \\ \ell_{\mathrm{c},\,\mathrm{step}+1} \end{pmatrix}^{\mathrm{T}}`\(  
+    6. \)`\mathrm{step} \gets \mathrm{step} + 2`\$.
+
 
 > [!CAUTION]
 > Если на текущем шаге не удаётся найти ни $1\times1$, ни $2\times2$ ведущие элементы, матрица считается численно вырожденной, и процесс факторизации аварийно прекращается.
