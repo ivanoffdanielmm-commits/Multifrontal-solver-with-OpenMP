@@ -129,12 +129,12 @@ $$\mathrm{nodeVars}[k] = \{ k \} \cup \{ i > k \mid a_{ik} \neq 0 \}$$
      1. Переставить $u \rightarrow \mathrm{step}$, $v \rightarrow \mathrm{step}+1$ в $F_k$ и $L_k$.
      2. Пересчитать значения $a, b, c$ в новых позициях.
      3. Сформировать блок и его обратную матрицу:
-     $$\mathrm{D}\sb{\mathrm{step}} = \begin{pmatrix} \mathrm{a} & \mathrm{b} \\ \mathrm{b} & \mathrm{c} \end{pmatrix}, \qquad \mathrm{D}\sb{\mathrm{step}}^{-1} = \frac{1}{\mathrm{det}} \begin{pmatrix} \mathrm{c} & -\mathrm{b} \\ -\mathrm{b} & \mathrm{a} \end{pmatrix}$$
-     4. Для $\mathrm{r} = \mathrm{step}+2, \ldots, \mathrm{m}-1$ вычислить строку множителей:
-     $$\begin{pmatrix} \ell\sb{\mathrm{r},\,\mathrm{step}} & \ell\sb{\mathrm{r},\,\mathrm{step}+1} \end{pmatrix} = \begin{pmatrix} \mathrm{F}\sb{\mathrm{k}}[\mathrm{r}][\mathrm{step}] & \mathrm{F}\sb{\mathrm{k}}[\mathrm{r}][\mathrm{step}+1] \end{pmatrix} \mathrm{D}\sb{\mathrm{step}}^{-1}$$
-     Записать их в $\mathrm{L}\sb{\mathrm{k}}[\mathrm{r}][\mathrm{step}]$ и $\mathrm{L}\sb{\mathrm{k}}[\mathrm{r}][\mathrm{step}+1]$.
-     5. **Обновление Шура:** Для $\mathrm{r}, \mathrm{c} = \mathrm{step}+2, \ldots, \mathrm{m}-1$:
-     $$\mathrm{F}\sb{\mathrm{k}}[\mathrm{r}][\mathrm{c}] \gets \mathrm{F}\sb{\mathrm{k}}[\mathrm{r}][\mathrm{c}] - \begin{pmatrix} \ell\sb{\mathrm{r},\,\mathrm{step}} & \ell\sb{\mathrm{r},\,\mathrm{step}+1} \end{pmatrix} \mathrm{D}\sb{\mathrm{step}} \begin{pmatrix} \ell\sb{\mathrm{c},\,\mathrm{step}} \\ \ell\sb{\mathrm{c},\,\mathrm{step}+1} \end{pmatrix}^{\mathrm{T}}$$
+   $$D_{\text{step}} = \begin{pmatrix} a & b \\ b & c \end{pmatrix}, \quad D_{\text{step}}^{-1} = \frac{1}{\text{det}} \begin{pmatrix} c & -b \\ -b & a \end{pmatrix}$$
+     4. Для $r = \text{step}+2, \ldots, m-1$ вычислить строку множителей: 
+    $$(\ell_{r,\,\text{step}}, \, \ell_{r,\,\text{step}+1}) = \begin{pmatrix} F_k[r][\text{step}] & F_k[r][\text{step}+1] \end{pmatrix} D_{\text{step}}^{-1}$$
+    Записать их в $L_k[r][\text{step}]$ и $L_k[r][\text{step}+1]$.
+     5. **Обновление Шура:** Для $r, c = \text{step}+2, \ldots, m-1$: 
+   $$F_k[r][c] \gets F_k[r][c] - \begin{pmatrix} \ell_{r,\,\text{step}} & \ell_{r,\,\text{step}+1} \end{pmatrix} D_{\text{step}} \begin{pmatrix} \ell_{c,\,\text{step}} \\ \ell_{c,\,\text{step}+1} \end{pmatrix}^{T}$$
      6. Увеличить шаг алгоритма на 2: $s \gets s + 2$.
 
 
