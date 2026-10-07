@@ -129,16 +129,14 @@ $$\mathrm{nodeVars}[k] = \{ k \} \cup \{ i > k \mid a_{ik} \neq 0 \}$$
      1. Переставить $u \rightarrow \mathrm{step}$, $v \rightarrow \mathrm{step}+1$ в $F_k$ и $L_k$.
      2. Пересчитать значения $a, b, c$ в новых позициях.
      3. Сформировать блок и его обратную матрицу:
-     ```math
-    \(\mathrm{D}_{\mathrm{step}} = \begin{pmatrix} \mathrm{a} & \mathrm{b} \\ \mathrm{b} & \mathrm{c} \end{pmatrix}, \qquad \mathrm{D}_{\mathrm{step}}^{-1} = \frac{1}{\mathrm{det}} \begin{pmatrix} \mathrm{c} & -\mathrm{b} \\ -\mathrm{b} & \mathrm{a} \end{pmatrix} \%\%\)MAGIT_PARSER_PROTECT%%```
-     4. Для $r = \mathrm{step}+2, \ldots, \mathrm{m}-1$ вычислить строку множителей:
-     ```math
-      \(\begin{pmatrix} \ell_{r,\,\mathrm{step}} & \ell_{r,\,\mathrm{step}+1} \end{pmatrix} = \begin{pmatrix} \mathrm{F}_k[r][\mathrm{step}] & \mathrm{F}_k[r][\mathrm{step}+1] \end{pmatrix} \mathrm{D}_{\mathrm{step}}^{-1} \%\%\)MAGIT_PARSER_PROTECT%%```
-    Записать их в $\mathrm{L}_k[r][\mathrm{step}]$ и $\mathrm{L}_k[r][\mathrm{step}+1]$.
-    5. **Обновление Шура:** Для $r, c = \mathrm{step}+2, \ldots, \mathrm{m}-1$:
-    ```math
-    \(\mathrm{F}_k[r][c] \gets \mathrm{F}_k[r][c] - \begin{pmatrix} \ell_{r,\,\mathrm{step}} & \ell_{r,\,\mathrm{step}+1} \end{pmatrix} \mathrm{D}_{\mathrm{step}} \begin{pmatrix} \ell_{c,\,\mathrm{step}} \\ \ell_{c,\,\mathrm{step}+1} \end{pmatrix}^T \%\%\)MAGIT_PARSER_PROTECT%%```
-    6. $\mathrm{step} \gets \mathrm{step} + 2$.
+     $$D_s = \begin{pmatrix} a & b \\ b & c \end{pmatrix}, \qquad D_s^{-1} = \frac{1}{\det} \begin{pmatrix} c & -b \\ -b & a \end{pmatrix}$$
+     4. Для $r = s + 2, \ldots, m - 1$ вычислить строку множителей:
+     $$\begin{pmatrix} \ell_{r,s} & \ell_{r,s+1} \end{pmatrix} = \begin{pmatrix} F_k(r, s) & F_k(r, s+1) \end{pmatrix} D_s^{-1}$$
+     Записать полученные значения в элементы матрицы $L_k$ для текущего шага.
+     5. **Обновление Шура:** Для всех индексов $r$ и $c$ от $s + 2$ до $m - 1$:
+     $$F_k(r,c) \gets F_k(r,c) - \begin{pmatrix} \ell_{r,s} & \ell_{r,s+1} \end{pmatrix} D_s \begin{pmatrix} \ell_{c,s} \\ \ell_{c,s+1} \end{pmatrix}^T$$
+     6. Увеличить шаг алгоритма на 2: $s \gets s + 2$.
+
 
 
 
